@@ -29,6 +29,7 @@ httpcommon.defaults.timeout = 10000;
 httpcommon.interceptors.request.use(
   config => {
     const token = localStorage.getItem("access_token");
+    
     if (token) {
       config.headers.common["Authorization"] = token;
     }

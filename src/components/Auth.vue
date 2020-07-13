@@ -86,7 +86,6 @@ export default {
         UserDataService.login(data)
         .then(response => {
 
-
           this.conFailed = 0;
 
           const res = response;
@@ -100,9 +99,10 @@ export default {
           this.logedUser.admin = res.data.user.admin;
           this.logedUser.token = res.data.token;
 
+
           console.log("logedUser ====>", this.logedUser)
           
-
+          localStorage.setItem("access_token", JSON.stringify(this.logedUser.token));
           localStorage.setItem("userLog", JSON.stringify(this.logedUser));
 
           let json = JSON.parse(localStorage.getItem("userLog"))

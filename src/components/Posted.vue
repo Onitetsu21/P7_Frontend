@@ -19,7 +19,7 @@
 
 <script>
 import PostDataService from "../services/PostDataService";
-
+import { emojis } from 'vue-chat-emoji'
 // import CommentDataService from "../services/CommentDataService";
 export default {
   name: "Posted",
@@ -40,6 +40,10 @@ export default {
       userName: "",
     }
   },
+
+  components: (
+    emojis
+  ),
 
   methods: {
     
@@ -63,6 +67,12 @@ export default {
       let postId = this.post.id
       console.log("postId ====>", postId)
       this.$router.push({ path: `/posts/${postId}` })
+    },
+    unEmojifyString(str) {
+      console.log(emojis.decodeEmoji(str)) 
+    },
+    emojifyString(str) {
+      console.log(emojis.encodeEmoji(str));
     },
 
   },

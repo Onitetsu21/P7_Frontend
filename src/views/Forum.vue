@@ -12,6 +12,7 @@
           
         </div>
         <div id="publishSection_emos">
+          <!-- <Emoji /> -->
           <div class="emo" @click="displayEmo" ><i class="far fa-meh-blank "  style="color:black"></i></div>
           <div class="displayEmo">
             <div class="emoSelect" @click="addEmo">&#128512;</div>
@@ -35,6 +36,7 @@
 import Posted from "@/components/Posted.vue";
 import Header from "@/components/Header.vue";
 import PostDataService from "../services/PostDataService";
+import { emojis } from 'vue-chat-emoji'
 export default {
   name: "Forum",
   data: function() {
@@ -51,7 +53,7 @@ export default {
   },
   mounted() {
         this.refreshList();
-        
+       
         
     },
 
@@ -64,19 +66,12 @@ export default {
         .then(response => {
 
           this.posts = response.data;
-         
-          
-          
-
-          
-
-          
-
         })
         .catch(e => {
           console.log(e);
         });
     },
+
     savePost() {
       let userId = JSON.parse(localStorage.getItem("userLog"))
       console.log("userId.id ====>", userId.id)
@@ -98,7 +93,6 @@ export default {
     },
     
     refreshList() {
-      
       this.retrievePosts();
       this.currentPost = null;
       this.currentIndex = -1;
@@ -128,26 +122,26 @@ export default {
       let input = document.querySelector("textarea");
       
       input.value += emoValue;
-    }
-    
-      
-    // displayPosted () {
-    //   let posted = document.querySelectorAll("Posted")
-
-    //   for(let i = 0; i < posted.length; i++){
-
-    //   }
-      
-
-
-
+    },
+    // getAllEmojis() {
+    //   console.log(emojis.all()); // [{...}]
+    //   this.emojifyString("Here is your 🎂.") /* => Here is your :birthday_cake:.*/
+    //   this.unEmojifyString("Here is your :birthday_cake:.") /* Here is your 🎂.*/
     // },
-  
+    unEmojifyString(str) {
+      console.log(emojis.decodeEmoji(str)) 
+    },
+    emojifyString(str) {
+      console.log(emojis.encodeEmoji(str));
+    },
+    
+    
 
   },
   components: {
     Posted,
-    Header
+    Header,
+    // Emoji: VueChatEmoji
   }
 };
 

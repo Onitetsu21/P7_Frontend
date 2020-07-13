@@ -18,7 +18,7 @@
         
         <div class="addCommentSection">
             <button class="addComment" @click="saveComment">Commenter</button>
-            <textarea class="commentInput" v-html="comment.content" @input="textareaChange($event)"/>
+            <textarea class="commentInput" v-model="comment.content" />
         </div>
         <div id="publishSection_emos-postDetail">
           <div class="emo" @click="displayEmo" ><i class="far fa-meh-blank"  ></i></div>
@@ -47,8 +47,8 @@ import Header from "@/components/Header.vue";
 import PostDataService from "../services/PostDataService";
 import Comment from "@/components/Comment.vue";
 import CommentDataService from "../services/CommentDataService";
-import {VueChatEmoji, emojis} from "vue-chat-emoji";
-require("vue-chat-emoji/dist/vue-chat-emoji.css");
+// import {VueChatEmoji, emojis} from "vue-chat-emoji";
+// require("vue-chat-emoji/dist/vue-chat-emoji.css");
 export default {
   name: "PostDetail",
   data() {
@@ -132,14 +132,7 @@ export default {
       PostDataService.get(id)
         .then(response => {
           this.postDetail = response.data;
-          this.postDetail.createdAt = this.dateReform(response.data.createdAt)
-
-
-
-          // let postDate = function(date){
-          //   date
-          // } 
-          
+          this.postDetail.createdAt = this.dateReform(response.data.createdAt)          
         })
         .catch(e => {
           console.log(e);
