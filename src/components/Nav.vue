@@ -4,6 +4,7 @@
     <router-link to="/login" v-if="navDtAuth == true" class="headerButton">Authentification</router-link>
     <router-link to="/forum" v-if="navAuth == true" class="headerButton">Forum</router-link>
     <router-link to="/profil" v-if="navAuth == true" class="headerButton">Profil</router-link>
+    <router-link to="/admin" v-if="adminCheck == true" class="headerButton">Admin</router-link>
     <div to="/" v-if="navAuth == true" class="headerButton" @click="deconnect">Se déconnecter</div>
     
     
@@ -25,6 +26,10 @@ export default {
         type: Boolean,
         default: false,
       },
+      adminCheck: {
+      type: Boolean,
+      default: false
+    }
     }
   },
 
@@ -41,6 +46,7 @@ export default {
       type: Boolean,
       default: true
     },
+    
 
     
   },
@@ -48,12 +54,19 @@ export default {
 
   mounted(){
     let userLoged = JSON.parse(localStorage.getItem("userLog"))
-    console.log(userLoged)
-    this.navDynamic(userLoged)
-    console.log(this.navAuth, this.navDtAuth)
+    
+    this.navDynamic(userLoged);
+    
+    this.adminMode(userLoged);
   },
 
   methods:{
+    adminMode(userLog){
+      if(userLog.admin == true){
+        this.adminCheck = true
+        
+      }
+    },
     userLog(){
       return JSON.parse(localStorage.getItem("userLog"))
     },
@@ -61,6 +74,7 @@ export default {
       localStorage.clear();
       try{
         this.$router.push("/");
+        this.adminCheck = 0;
       }catch{
         console.log("déjà sur place")
       }

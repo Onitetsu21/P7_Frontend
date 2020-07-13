@@ -5,6 +5,7 @@ import Forum from "../views/Forum.vue";
 import Profil from "../views/Profil.vue";
 import Signin from "../views/Signin.vue";
 import PostDetail from "../views/PostDetail.vue";
+import Admin from "../views/Admin.vue";
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,11 @@ const routes = [
     path: "/profil",
     name: "Profil",
     component: Profil,
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
   },
   {
     path: "/about",
