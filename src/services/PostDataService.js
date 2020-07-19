@@ -24,7 +24,6 @@ class PostDataService {
   deleteAll() {
     return http.delete(`/posts`);
   }
-
 }
 
 export default new PostDataService();

@@ -20,6 +20,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Header from "@/components/Header.vue";
 import UserDataService from "../services/UserDataService";
@@ -33,44 +34,36 @@ export default {
       password: ""
     };
   },
-  props: {},
+
   components: {
     Header
-    // Forum
   },
+
   methods: {
     validateEmail(email) {
-      // const re = (/\b[\w]+@[\w]+\.\w{2,4}\b/gi); 
       return (/\b[\w]+@[\w]+\.\w{2,4}\b/gi).test(String(email).toLowerCase());
     },
-    signin() {
-      console.log(this.email)
-      console.log(this.validateEmail(this.newUser.email))
-      if(this.validateEmail(this.newUser.email) == true){
-        
-      var data =  {
-        name: this.newUser.name,
-        email: this.newUser.email,
-        password: this.newUser.password
-      };
-      UserDataService.create(data)
-      .then(response => {
-        this.newUser.id = response.data.id;
-        console.log(response.data)
-        this.$router.push("/")
-      })
-      .catch(e => {
-        console.log(e);
-      });
 
+    signin() {
+      if(this.validateEmail(this.newUser.email) == true){
+        var data =  {
+          name: this.newUser.name,
+          email: this.newUser.email,
+          password: this.newUser.password
+        };
+        UserDataService.create(data)
+        .then(response => {
+          this.newUser.id = response.data.id;
+          console.log(response.data)
+          this.$router.push("/")
+        })
+        .catch(e => {
+          console.log(e);
+        });
       }else{
         window.alert("Veuillez rentrer une adresse mail valide!")
-      }
-        
-      
-      
+      } 
     }
-
   }
 };
 </script>
@@ -81,6 +74,7 @@ export default {
   font-family: Retroica;
   src: url(../assets/polices/Retroica.ttf);
 }
+
 #auth {
   max-width: 510px;
   display: flex;
@@ -110,12 +104,9 @@ export default {
   text-align: center;
 }
 
-
-
 #email, #password, #name {
   margin: 10px;
 }
-
 
 h1 {
   text-align: center;

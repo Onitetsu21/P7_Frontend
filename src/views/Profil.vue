@@ -26,20 +26,12 @@
 </template>
 
 <script>
-// const pool = require("../../server/server");
-// const deleteUser = require("../../server/server");
-
-
-// const mysql = require("mysql");
 import Header from "@/components/Header.vue";
-
 import UserDataService from "../services/UserDataService";
-
 export default {
   name: "Profil",
   data: function() {
     return {
-
       user: {
         name: "",
         email: "",
@@ -47,16 +39,14 @@ export default {
       },
     };
   },
+
   components: {
     Header
   },
+
   methods: {
-  
- 
-   deleteProfil(){
-      
+    deleteProfil(){
       let userId = localStorage.getItem("userLogId")
-      
       UserDataService.delete(userId)
       .then(response =>{
         console.log(response);
@@ -64,46 +54,34 @@ export default {
       })
       .catch(e =>{
         console.log(e);
-      });
-      
+      });  
     },
 
     modifyProfil(){
-    
-    // window.prompt("Modifier le message");
-    // var msgModify = prompt("Modifier le post :");
-    // this.user.content = msgModify;
-    let userId = JSON.parse(localStorage.getItem("userLog"))
-    if(!this.user.name){
-      this.user.name = userId.name
-    }
-    if(!this.user.email){
-      this.user.email = userId.email
-    }
-    if(!this.user.password){
-      this.user.password = userId.password
-    }
-    console.log(userId.id)
-    UserDataService.update(userId.id, this.user)
-    .then(response =>{
-        this.user = {}
-        console.log(response);
-        window.alert("Votre profil à été mis à jour!")
-        this.$router.push("/forum")
-
-       
-      })
-      .catch(e =>{
-        console.log(e);
+      let userId = JSON.parse(localStorage.getItem("userLog"))
+      if(!this.user.name){
+        this.user.name = userId.name
+      }
+      if(!this.user.email){
+        this.user.email = userId.email
+      }
+      if(!this.user.password){
+        this.user.password = userId.password
+      }
+      console.log(userId.id)
+      UserDataService.update(userId.id, this.user)
+      .then(response =>{
+          this.user = {}
+          console.log(response);
+          window.alert("Votre profil à été mis à jour!")
+          this.$router.push("/forum")
+        })
+        .catch(e =>{
+          console.log(e);
       })
     },
-  
   },
-
-
-
-  }
-
+}
 </script>
 
 <style scoped>
@@ -147,10 +125,8 @@ button {
 }
 
 #email, #psw, #name {
-  margin: 10px;
-  
+  margin: 10px; 
 }
-
 
 h1 {
   text-align: center;
@@ -163,11 +139,8 @@ h1 {
 
 @media all and (max-width: 499px){
   #email, #psw, #name {
-  margin: 10px 0 0 0;
-  max-width: 93%;
-  
+    margin: 10px 0 0 0;
+    max-width: 93%;
+  }
 }
-}
-
-
 </style>

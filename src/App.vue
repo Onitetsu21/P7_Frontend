@@ -8,17 +8,16 @@
     <router-view />
   </div>
 </template>
+
 <script>
 export default {
   name:"app",
   created(){
     document.title = "GroupomaChat"
-    
-
-    // document.querySelector("link[rel='stylesheet']").setAttribute("href", "path/to/font-awesome/css/font-awesome.min.css")
   }
 }
 </script>
+
 <style>
 #app {
   -webkit-font-smoothing: antialiased;
@@ -32,9 +31,11 @@ export default {
   top: 0px;
   left: 0px;
 }
+
 a:link {
   text-decoration: none;
 }
+
 a:visited {
   color: white;
 }
@@ -47,16 +48,13 @@ button, .button {
   color: white;
   border: 1px solid #091f4342;
   border-radius: 5px;
-  /* margin: auto 5px auto 2.5px; */
   font-family: Retroica;
   font-size: 1rem;
-  
 }
 
 
 button:hover, .button:hover{
   scale: 1.1;
-  /* border: 1px solid rgba(255, 255, 255, 0.514); */
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
 }
@@ -78,20 +76,15 @@ textarea:focus{
   height: 70px;
   transition: ease-in-out;
   transition-duration: 0.3s;
-  
 }
 
 input:hover {
   border: 1px solid black;
-  
 }
 
 @media all and (max-width: 500px){
   input, textarea {
-    width: 400px;
-    
-    
+    width: 400px;  
   }
-  
 }
 </style>

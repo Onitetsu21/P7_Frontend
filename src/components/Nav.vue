@@ -6,10 +6,9 @@
     <router-link to="/profil" v-if="navAuth == true" class="headerButton">Profil</router-link>
     <router-link to="/admin" v-if="adminCheck == true" class="headerButton">Admin</router-link>
     <div to="/" v-if="navAuth == true" class="headerButton" @click="deconnect">Se déconnecter</div>
-    
-    
   </div>
 </template>
+
 <script>
 export default {
   name: "Nav",
@@ -18,7 +17,7 @@ export default {
       links: [],
       link: "",
       page: "",
-          navAuth: {
+      navAuth: {
         type: Boolean,
         default: false,
       },
@@ -27,9 +26,9 @@ export default {
         default: false,
       },
       adminCheck: {
-      type: Boolean,
-      default: false
-    }
+        type: Boolean,
+        default: false
+      } 
     }
   },
 
@@ -46,17 +45,11 @@ export default {
       type: Boolean,
       default: true
     },
-    
-
-    
   },
-
 
   mounted(){
     let userLoged = JSON.parse(localStorage.getItem("userLog"))
-    
     this.navDynamic(userLoged);
-    
     this.adminMode(userLoged);
   },
 
@@ -64,24 +57,24 @@ export default {
     adminMode(userLog){
       if(userLog.admin == true){
         this.adminCheck = true
-        
       }
     },
+
     userLog(){
       return JSON.parse(localStorage.getItem("userLog"))
     },
+
     deconnect(){
       localStorage.clear();
       try{
         this.$router.push("/");
         this.adminCheck = 0;
       }catch{
-        console.log("déjà sur place")
+        console.log("Veuillez vous connecter")
       }
-      
     },
+
     navDynamic(loged){
-      
       if (!loged){
         this.navAuth = false;
         this.navDtAuth = true
@@ -89,19 +82,12 @@ export default {
         this.navAuth = true;
         this.navDtAuth = false
       }
-    //  return {
-    //    sucess: this.navAuth,
-    //    danger: this.navDtAuth
-    //  }
-    
     }
   }
 };
 </script>
 
-
 <style scoped>
-
 .headerButton {
   background-color: #091f0000;
   color: white;
@@ -111,8 +97,8 @@ export default {
   margin-right: 5px;
   font-size: 1rem;
   cursor: pointer;
-  
 }
+
 .navButton {
   margin: auto;
   display: flex;

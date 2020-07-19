@@ -24,7 +24,6 @@ class CommentDataService {
   deleteAll() {
     return http.delete(`/Comments`);
   }
-
 }
 
 export default new CommentDataService();
