@@ -141,14 +141,11 @@ export default {
   text-overflow: clip;
   overflow-wrap: break-word;
   text-overflow: "…";
-  text-overflow: fade;
-  text-overflow: fade(10px);
-  text-overflow: fade(5%);
 }
 
 
 .detailPost{
-  background-color: grey;
+  background-color: white;
   color: #091f43;
   border-radius: 5px;
   margin: 10px auto auto auto;

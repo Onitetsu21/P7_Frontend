@@ -1,19 +1,19 @@
 <template>
   <div id="body">
     <Header />
-    <div id="auth">
+    <div id="auth" aria-labelledby="signinTitle" aria-describedby="name email password">
       <h1 id="signinTitle">Veuillez vous identifier pour rejoindre le GroupomaChat</h1>
       <div id="name">
-        <label for="email">Nom d'utilisateur</label>
-        <input v-model="newUser.name" placeholder="Nom d'utilisateur" />
+        <label for="name" >Nom d'utilisateur</label>
+        <input title="name" v-model="newUser.name" placeholder="Nom d'utilisateur" />
       </div>
       <div id="email">
         <label for="email">Email :</label>
-        <input type="email" v-model="newUser.email" placeholder="Email" />
+        <input title="email" type="email" v-model="newUser.email" placeholder="Email" />
       </div>
       <div id="password">
         <label for="password">Mot de passe :</label>
-        <input type="password" v-model="newUser.password" placeholder="Mot de passe" />
+        <input title="password" type="password" v-model="newUser.password" placeholder="Mot de passe" />
       </div>
       <div id="connexion" @click="signin"> S'inscrire au groupomaChat! </div>
       
@@ -55,6 +55,7 @@ export default {
         .then(response => {
           this.newUser.id = response.data.id;
           console.log(response.data)
+          window.alert("Votre inscription est validé, vous pouvez désormais vous connecter!")
           this.$router.push("/")
         })
         .catch(e => {

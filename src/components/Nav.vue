@@ -19,17 +19,17 @@ export default {
       page: "",
       navAuth: {
         type: Boolean,
-        default: false,
+        default: false
       },
       navDtAuth: {
         type: Boolean,
-        default: false,
+        default: false
       },
       adminCheck: {
         type: Boolean,
         default: false
-      } 
-    }
+      }
+    };
   },
 
   props: {
@@ -44,43 +44,43 @@ export default {
     profilPage: {
       type: Boolean,
       default: true
-    },
+    }
   },
 
-  mounted(){
-    let userLoged = JSON.parse(localStorage.getItem("userLog"))
+  mounted() {
+    let userLoged = JSON.parse(localStorage.getItem("userLog"));
     this.navDynamic(userLoged);
     this.adminMode(userLoged);
   },
 
-  methods:{
-    adminMode(userLog){
-      if(userLog.admin == true){
-        this.adminCheck = true
+  methods: {
+    adminMode(userLog) {
+      if (userLog.admin && userLog.admin == true) {
+        this.adminCheck = true;
       }
     },
 
-    userLog(){
-      return JSON.parse(localStorage.getItem("userLog"))
+    userLog() {
+      return JSON.parse(localStorage.getItem("userLog"));
     },
 
-    deconnect(){
+    deconnect() {
       localStorage.clear();
-      try{
+      try {
         this.$router.push("/");
         this.adminCheck = 0;
-      }catch{
-        console.log("Veuillez vous connecter")
+      } catch {
+        console.log("Veuillez vous connecter");
       }
     },
 
-    navDynamic(loged){
-      if (!loged){
+    navDynamic(loged) {
+      if (!loged) {
         this.navAuth = false;
-        this.navDtAuth = true
-      }else{
+        this.navDtAuth = true;
+      } else {
         this.navAuth = true;
-        this.navDtAuth = false
+        this.navDtAuth = false;
       }
     }
   }

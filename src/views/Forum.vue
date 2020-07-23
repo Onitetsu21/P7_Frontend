@@ -7,7 +7,7 @@
       <h3>Poster une publication</h3>
       <div id="publishSection">
         <div id="publishSection_top">
-          <textarea id="publishContent" type="text" v-model="post.content" />
+          <textarea id="publishContent" title="publish" type="text" v-model="post.content" />
           <button id="publishButton" v-on:click="savePost" @click="refreshList">Publier</button>
         </div>
       </div>
@@ -224,11 +224,7 @@ h3{
     max-width: 480px;
     padding: 10px;
     text-align: left;
-    overflow: clip ellipsis;
-    overflow: "…" "…";
-    overflow: fade clip;
-    overflow: fade(10px) fade(10px);
-    overflow: fade(5%) fade(5%);
+
   }
 
   .createdAt {

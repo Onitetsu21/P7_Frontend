@@ -14,7 +14,7 @@
         <div class="comments" >
           <div class="addCommentSection">
               <button class="addComment" @click="saveComment">Commenter</button>
-              <textarea class="commentInput" v-model="comment.content" />
+              <textarea title="publish comment" class="commentInput" v-model="comment.content" />
           </div>
           <div class="comments_bloc" v-if="comment_display == 1">
             <Comment class="comment" :class="{ active: index == currentIndex }" v-for="(comment, index) in comments" :key="index" :comment="comment" @click="refreshList"/> 
@@ -203,14 +203,11 @@ export default {
   border-radius: 5px;
   text-overflow: clip;
   overflow-wrap: break-word;
-  text-overflow: "…";
-  text-overflow: fade;
-  text-overflow: fade(10px);
-  text-overflow: fade(5%);
+
 }
 
 .posted {
-  margin: 25 auto 25 auto;
+  margin: 25px auto 25px auto;
   width: 500px;
 }
 
@@ -246,7 +243,7 @@ export default {
 
 .addComment{
   margin: auto;
-  background-color: grey;
+  background-color: white;
   color:#091f43;
 }
 .commentInput{

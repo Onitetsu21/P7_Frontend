@@ -6,16 +6,16 @@
     <div id="profil">
       <h1>Gestion de profil</h1>
       <div id="name">
-        <label for="email">Changer de nom d'utilisateur :</label>
-        <input  v-model="user.name" placeholder="Nom" />
+        <label for="name">Changer de nom d'utilisateur :</label>
+        <input title="name"  v-model="user.name" placeholder="Nom" />
       </div>
       <div id="email">
         <label for="email">Changer d'email :</label>
-        <input type="email" v-model="user.email" placeholder="Email" />
+        <input title="email" type="email" v-model="user.email" placeholder="Email" />
       </div>
       <div id="psw">
         <label for="psw">Changer de mot de passe :</label>
-        <input type="password" v-model="user.password" placeholder="Mot de passe" />
+        <input title="password" type="password" v-model="user.password" placeholder="Mot de passe" />
       </div>
       <div id="profilButtons">
         <button id="updateprofil" v-on:click="modifyProfil">Sauvegarder les modifications</button>

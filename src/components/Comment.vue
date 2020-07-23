@@ -121,14 +121,11 @@ export default {
   text-overflow: clip;
   overflow-wrap: break-word;
   text-overflow: "…";
-  text-overflow: fade;
-  text-overflow: fade(10px);
-  text-overflow: fade(5%);
 }
 
 .createdAt{
   margin: 1px;
-  padding: O;
+
 }
 
 .comment_button {

@@ -1,22 +1,25 @@
 <template>
   <div id="body">
     <Header />
-    <div id="auth">
-      <div id="signinSection" >
+    <div id="auth" aria-labelledby="signupTitle"  aria-describedby="email password" >
+      <div id="signinSection">
         <h2>Si vous n'avez pas encore de compte Groupaniac, inscrivez-vous!</h2>
         <button id="signinButton" @click="signinButton">S'inscrire</button>
       </div>
       <h1 id="signupTitle">Veuillez vous identifier pour rejoindre le GroupomaChat</h1>
-      <div id="conFailed" v-if="this.conFailed == 1">Anthentification échouée! Les informations remplies ne sont pas valides</div>
+      <div
+        id="conFailed"
+        v-if="this.conFailed == 1"
+      >Anthentification échouée! Les informations remplies ne sont pas valides</div>
       <div id="email">
         <label for="email">Email :</label>
-        <input v-model="user.email" placeholder="Email" />
+        <input title="email" v-model="user.email" placeholder="Email" />
       </div>
       <div id="password">
         <label for="password">Mot de passe :</label>
-        <input type="password" v-model="user.password" placeholder="Mot de passe" />
+        <input title="password" type="password" v-model="user.password" placeholder="Mot de passe" />
       </div>
-      <div class="button" id="connexion" @click="loginUser"> Connexion au GroupomaChat! </div>
+      <div class="button" id="connexion" @click="loginUser">Connexion au GroupomaChat!</div>
     </div>
   </div>
 </template>
@@ -29,74 +32,80 @@ export default {
   data: function() {
     return {
       user: {
-        id:'',
+        id: "",
         name: "",
         email: "",
         password: ""
       },
       logedUser: {
-        id:'',
+        id: "",
         name: "",
         email: "",
         password: ""
       },
       conFailed: {
         type: Boolean,
-        default: false,
+        default: false
       },
       userId: {
         type: Number
       },
       isAuth: {
         type: Boolean,
-        default: false,
-      },
+        default: false
+      }
     };
   },
-  
+
   components: {
     Header
   },
 
+
   methods: {
-    
-    userLog(){
-      let userLogin = JSON.parse(localStorage.getItem("userLog"))
-      console.log(userLogin)
+    userLog() {
+      let userLogin = JSON.parse(localStorage.getItem("userLog"));
+      console.log(userLogin);
     },
-  
+
     loginUser() {
-      var data =  {
-        userId: this.userId ,
+      var data = {
+        userId: this.userId,
         email: this.user.email,
         password: this.user.password
       };
       UserDataService.login(data)
-      .then(response => {
-        this.conFailed = 0;
-        const res = response;
-        this.logedUser.id = res.data.user.id;
-        this.logedUser.name = res.data.user.name;
-        this.logedUser.email = res.data.user.email;
-        this.logedUser.password = res.data.user.password;
-        this.logedUser.admin = res.data.user.admin;
-        this.logedUser.token = res.data.token;
-        localStorage.setItem("access_token", JSON.stringify(this.logedUser.token));
-        localStorage.setItem("userLog", JSON.stringify(this.logedUser));
-        console.log("Authentification réussie");
-        this.$router.push("/forum");
-      })
-      .catch(e => {
-        this.conFailed = 1;
-        console.log(e);
-        console.log("Erreur d'authentification")
-      });
+        .then(response => {
+          this.conFailed = 0;
+          const res = response;
+          this.logedUser.id = res.data.user.id;
+          this.logedUser.name = res.data.user.name;
+          this.logedUser.email = res.data.user.email;
+          this.logedUser.password = res.data.user.password;
+          this.logedUser.admin = res.data.user.admin;
+          this.logedUser.token = res.data.token;
+
+          localStorage.setItem(
+            "access_token",
+            JSON.stringify(this.logedUser.token)
+          );
+
+          localStorage.setItem("userLog", JSON.stringify(this.logedUser));
+          console.log("Authentification réussie");
+          this.$router.push("/forum");
+        })
+        .catch(e => {
+          this.conFailed = 1;
+
+          console.log(e);
+          console.log("Erreur d'authentification");
+        });
     },
-  
-    signinButton(){
-      this.$router.push("signin")
-    },
-  },
+
+    signinButton() {
+      this.$router.push("signin");
+    }
+  }
 };
 </script>
 
@@ -169,8 +178,10 @@ h2 {
   margin: 50px auto 25px auto;
 }
 
-@media all and (max-width: 599px){
-  #email, #password, #name {
+@media all and (max-width: 599px) {
+  #email,
+  #password,
+  #name {
     margin: 10px 0 0 0;
     max-width: 93%;
   }

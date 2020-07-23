@@ -199,11 +199,8 @@ h3{
     max-width: 480px;
     padding: 10px;
     text-align: left;
-    overflow: clip ellipsis;
-    overflow: "…" "…";
-    overflow: fade clip;
-    overflow: fade(10px) fade(10px);
-    overflow: fade(5%) fade(5%);
+   
+
   }
 
   .createdAt {
