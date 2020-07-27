@@ -110,6 +110,7 @@ export default {
       PostDataService.delete(this.postDetail.id)
       .then(response =>{
         console.log(response.data);
+        window.alert("Votre publication a été supprimé !")
         this.$router.push("/forum")
       })
       .catch(e =>{
@@ -122,7 +123,8 @@ export default {
       this.postDetail.content = msgModify;
       PostDataService.update(this.postDetail.id, this.postDetail)
       .then(response =>{
-          document.location.reload(true);
+          window.alert("Votre publication a été modifié!")
+          // document.location.reload(true);
           console.log(msgModify)
           console.log(response)
         })

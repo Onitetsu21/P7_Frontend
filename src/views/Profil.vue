@@ -46,11 +46,15 @@ export default {
 
   methods: {
     deleteProfil(){
-      let userId = localStorage.getItem("userLogId")
-      UserDataService.delete(userId)
+      let userId = JSON.parse(localStorage.getItem("userLog"))
+      
+      UserDataService.delete(userId.id)
       .then(response =>{
         console.log(response);
+        localStorage.clear();
         window.alert("Utilisateur supprimé!")
+        this.$router.push("/")
+        
       })
       .catch(e =>{
         console.log(e);

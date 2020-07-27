@@ -59,7 +59,8 @@ export default {
       CommentDataService.delete(this.comment.id)
       .then(response =>{
         console.log(response.data);
-        document.location.reload(true);
+        window.alert("Votre commentaire a été supprimé !")
+        this.$router.push("/forum")
       })
       .catch(e =>{
         console.log(e);
@@ -71,7 +72,7 @@ export default {
     this.comment.content = msgModify;
     CommentDataService.update(this.comment.id, this.comment)
     .then(response =>{
-        document.location.reload(true);
+        window.alert("Votre commentaire a été modifié !")
         console.log(response)
       })
       .catch(e =>{
