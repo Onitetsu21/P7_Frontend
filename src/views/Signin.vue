@@ -1,22 +1,41 @@
 <template>
   <div id="body">
     <Header />
-    <div id="auth" aria-labelledby="signinTitle" aria-describedby="name email password">
-      <h1 id="signinTitle">Veuillez vous identifier pour rejoindre le GroupomaChat</h1>
+    <div
+      id="auth"
+      aria-labelledby="signinTitle"
+      aria-describedby="name email password"
+    >
+      <h1 id="signinTitle">
+        Veuillez vous identifier pour rejoindre le GroupomaChat
+      </h1>
       <div id="name">
-        <label for="name" >Nom d'utilisateur</label>
-        <input title="name" v-model="newUser.name" placeholder="Nom d'utilisateur" />
+        <label for="name">Nom d'utilisateur</label>
+        <input
+          title="name"
+          v-model="newUser.name"
+          placeholder="Nom d'utilisateur"
+        />
       </div>
       <div id="email">
         <label for="email">Email :</label>
-        <input title="email" type="email" v-model="newUser.email" placeholder="Email" />
+        <input
+          title="email"
+          type="email"
+          v-model="newUser.email"
+          placeholder="Email"
+        />
       </div>
       <div id="password">
         <label for="password">Mot de passe :</label>
-        <input title="password" type="password" v-model="newUser.password" placeholder="Mot de passe" />
+        <input
+          title="password"
+          type="password"
+          v-model="newUser.password"
+          placeholder="Mot de passe"
+        />
       </div>
-      <div id="connexion" @click="signin"> S'inscrire au groupomaChat! </div>
-      
+      <div id="connexion" @click="signin">S'inscrire au groupomaChat!</div>
     </div>
   </div>
 </template>
@@ -28,49 +47,54 @@ export default {
   name: "Auth",
   data: function() {
     return {
-      newUser:[],
-      name:"",
+      newUser: [],
+      name: "",
       email: "",
-      password: ""
+      password: "",
     };
   },
 
   components: {
-    Header
+    Header,
   },
 
   methods: {
     validateEmail(email) {
-      return (/\b[\w]+@[\w]+\.\w{2,4}\b/gi).test(String(email).toLowerCase());
+      return /\b[\w]+@[\w]+\.\w{2,4}\b/gi.test(String(email).toLowerCase());
     },
 
     signin() {
-      if(this.validateEmail(this.newUser.email) == true){
-        var data =  {
+      if (this.validateEmail(this.newUser.email) == true) {
+        var data = {
           name: this.newUser.name,
           email: this.newUser.email,
-          password: this.newUser.password
+          password: this.newUser.password,
         };
+
         UserDataService.create(data)
-        .then(response => {
-          this.newUser.id = response.data.id;
-          console.log(response.data)
-          window.alert("Votre inscription est validé, vous pouvez désormais vous connecter!")
-          this.$router.push("/")
-        })
-        .catch(e => {
-          console.log(e);
-        });
-      }else{
-        window.alert("Veuillez rentrer une adresse mail valide!")
-      } 
-    }
-  }
+          .then((response) => {
+            this.newUser.id = response.data.id;
+            console.log(response.data);
+            window.alert(
+              "Votre inscription est validé, vous pouvez désormais vous connecter!"
+            );
+            this.$router.push("/");
+          })
+          .catch((e) => {
+            console.log(e);
+            window.alert(
+              "Veuillez remplir le formulaire avec un email non existant"
+            );
+          });
+      } else {
+        window.alert("Veuillez rentrer une adresse mail valide!");
+      }
+    },
+  },
 };
 </script>
 
-
-<style >
+<style>
 @font-face {
   font-family: Retroica;
   src: url(../assets/polices/Retroica.ttf);
@@ -105,7 +129,9 @@ export default {
   text-align: center;
 }
 
-#email, #password, #name {
+#email,
+#password,
+#name {
   margin: 10px;
 }
 

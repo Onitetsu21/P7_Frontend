@@ -45,9 +45,6 @@ httpcommon.interceptors.response.use(
         case 401:
           alert("session expired");
           break;
-        case 402:
-          alert("Email déjà inscrit !");
-          break;
         case 403:
           router.replace({
             path: "/login",
