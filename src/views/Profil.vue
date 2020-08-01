@@ -7,7 +7,7 @@
       <h1>Gestion de profil</h1>
       <div id="name">
         <label for="name">Changer de nom d'utilisateur :</label>
-        <input title="name"  v-model="user.name" placeholder="Nom" />
+        <input title="name" v-model="user.name" placeholder="Nom" />
       </div>
       <div id="email">
         <label for="email">Changer d'email :</label>
@@ -30,62 +30,69 @@ import Header from "@/components/Header.vue";
 import UserDataService from "../services/UserDataService";
 export default {
   name: "Profil",
-  data: function() {
+  data: function () {
     return {
       user: {
         name: "",
         email: "",
-        password: ""
+        password: "",
       },
     };
   },
 
   components: {
-    Header
+    Header,
+  },
+  created() {
+    this.access();
   },
 
   methods: {
-    deleteProfil(){
-      let userId = JSON.parse(localStorage.getItem("userLog"))
-      
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
+    deleteProfil() {
+      let userId = JSON.parse(localStorage.getItem("userLog"));
+
       UserDataService.delete(userId.id)
-      .then(response =>{
-        console.log(response);
-        localStorage.clear();
-        window.alert("Utilisateur supprimé!")
-        this.$router.push("/")
-        
-      })
-      .catch(e =>{
-        console.log(e);
-      });  
+        .then((response) => {
+          console.log(response);
+          localStorage.clear();
+          window.alert("Utilisateur supprimé!");
+          this.$router.push("/");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
 
-    modifyProfil(){
-      let userId = JSON.parse(localStorage.getItem("userLog"))
-      if(!this.user.name){
-        this.user.name = userId.name
+    modifyProfil() {
+      let userId = JSON.parse(localStorage.getItem("userLog"));
+      if (!this.user.name) {
+        this.user.name = userId.name;
       }
-      if(!this.user.email){
-        this.user.email = userId.email
+      if (!this.user.email) {
+        this.user.email = userId.email;
       }
-      if(!this.user.password){
-        this.user.password = userId.password
+      if (!this.user.password) {
+        this.user.password = userId.password;
       }
-      console.log(userId.id)
+      console.log(userId.id);
       UserDataService.update(userId.id, this.user)
-      .then(response =>{
-          this.user = {}
+        .then((response) => {
+          this.user = {};
           console.log(response);
-          window.alert("Votre profil à été mis à jour!")
-          this.$router.push("/forum")
+          window.alert("Votre profil à été mis à jour!");
+          this.$router.push("/forum");
         })
-        .catch(e =>{
+        .catch((e) => {
           console.log(e);
-      })
+        });
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -128,8 +135,10 @@ button {
   background-color: #570322;
 }
 
-#email, #psw, #name {
-  margin: 10px; 
+#email,
+#psw,
+#name {
+  margin: 10px;
 }
 
 h1 {
@@ -141,8 +150,10 @@ h1 {
   font-size: 2rem;
 }
 
-@media all and (max-width: 499px){
-  #email, #psw, #name {
+@media all and (max-width: 499px) {
+  #email,
+  #psw,
+  #name {
     margin: 10px 0 0 0;
     max-width: 93%;
   }

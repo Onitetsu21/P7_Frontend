@@ -12,7 +12,13 @@
         </div>
       </div>
       <div id="forum">
-        <Posted :class="{ active: index == currentIndex }" v-for="(post, index) in posts" v-bind:post="post" v-bind:key="index" @hover="setActivePost(post, index)"  />
+        <Posted
+          :class="{ active: index == currentIndex }"
+          v-for="(post, index) in posts"
+          v-bind:post="post"
+          v-bind:key="index"
+          @hover="setActivePost(post, index)"
+        />
       </div>
     </div>
   </div>
@@ -24,16 +30,16 @@ import Header from "@/components/Header.vue";
 import PostDataService from "../services/PostDataService";
 export default {
   name: "Forum",
-  data: function() {
+  data: function () {
     return {
-      posts:[],
+      posts: [],
       currentPost: null,
       currentIndex: -1,
       post: [],
       message: "",
       userId: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   },
 
@@ -41,35 +47,43 @@ export default {
     this.refreshList();
   },
 
+  created() {
+    this.access();
+  },
+
   methods: {
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
     retrievePosts() {
       PostDataService.getAll()
-        .then(response => {
-
+        .then((response) => {
           this.posts = response.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
 
     savePost() {
-      let userId = JSON.parse(localStorage.getItem("userLog"))
+      let userId = JSON.parse(localStorage.getItem("userLog"));
       var data = {
         content: this.post.content,
         userId: userId.id,
-        userName: userId.name
+        userName: userId.name,
       };
       PostDataService.create(data)
-        .then(response => {
+        .then((response) => {
           this.post.id = response.data.id;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-        setTimeout(this.refreshList, 300)
+      setTimeout(this.refreshList, 300);
     },
-    
+
     refreshList() {
       this.retrievePosts();
       this.currentPost = null;
@@ -79,21 +93,21 @@ export default {
     setActivePost(post, index) {
       this.currentPost = post;
       this.currentIndex = index;
-      localStorage.setItem("currentPost", JSON.stringyfy(this.currentPost))
+      localStorage.setItem("currentPost", JSON.stringyfy(this.currentPost));
     },
   },
 
   components: {
     Posted,
     Header,
-  }
+  },
 };
 </script>
 
 <style>
 @keyframes postedMove {
   from {
-    opacity : 0;
+    opacity: 0;
     transform: translateX(-50px);
   }
   to {
@@ -124,7 +138,7 @@ export default {
   font-family: Retroica;
 }
 
-#publishContent { 
+#publishContent {
   width: 100%;
 }
 
@@ -155,20 +169,20 @@ export default {
   font-size: 1rem;
 }
 
-h3{
+h3 {
   font-family: Retroica;
   color: #091f43;
 }
 
-@media all and (max-width: 499px){
-  #publishSection{
+@media all and (max-width: 499px) {
+  #publishSection {
     display: flex;
     flex-direction: column;
     max-width: 100%;
   }
-  
+
   .posted {
-    margin: 10px auto auto auto;  
+    margin: 10px auto auto auto;
     animation: postedMove;
     animation-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -193,7 +207,7 @@ h3{
     font-family: Retroica;
   }
 
-  #publishContent{
+  #publishContent {
     max-width: 80%;
     left: 0px;
     padding: 10px 0 10px 0;
@@ -208,7 +222,7 @@ h3{
   }
 }
 
-@media all and (min-width: 500px){
+@media all and (min-width: 500px) {
   .posted {
     animation: postedMove;
     animation-duration: 1s;
@@ -224,7 +238,6 @@ h3{
     max-width: 480px;
     padding: 10px;
     text-align: left;
-
   }
 
   .createdAt {

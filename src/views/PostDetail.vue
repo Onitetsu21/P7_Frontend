@@ -2,24 +2,39 @@
   <div id="body">
     <Header />
     <div class="postDetail">
-      <router-link to="/forum"  class="backToForum button">Retourner au forum</router-link>
-      <div class="posted"> 
+      <router-link to="/forum" class="backToForum button">Retourner au forum</router-link>
+      <div class="posted">
         <div class="post-userName">{{postDetail.userName}}</div>
-        <div class="posted_bloc" >{{ postDetail.content }}</div>
+        <div class="posted_bloc">{{ postDetail.content }}</div>
         <div type="date" class="createdAt">{{postDetail.createdAt}}</div>
         <div class="posted_button">
-          <button class="deletePost" v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName" @click="deletePost">Supprimer</button>
-          <button class="modifyPost" v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName" @click="modifyPost">Modifier</button>
+          <button
+            class="deletePost"
+            v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName"
+            @click="deletePost"
+          >Supprimer</button>
+          <button
+            class="modifyPost"
+            v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName"
+            @click="modifyPost"
+          >Modifier</button>
         </div>
-        <div class="comments" >
+        <div class="comments">
           <div class="addCommentSection">
-              <button class="addComment" @click="saveComment">Commenter</button>
-              <textarea title="publish comment" class="commentInput" v-model="comment.content" />
+            <button class="addComment" @click="saveComment">Commenter</button>
+            <textarea title="publish comment" class="commentInput" v-model="comment.content" />
           </div>
           <div class="comments_bloc" v-if="comment_display == 1">
-            <Comment class="comment" :class="{ active: index == currentIndex }" v-for="(comment, index) in comments" :key="index" :comment="comment" @click="refreshList"/> 
+            <Comment
+              class="comment"
+              :class="{ active: index == currentIndex }"
+              v-for="(comment, index) in comments"
+              :key="index"
+              :comment="comment"
+              @click="refreshList"
+            />
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
@@ -39,134 +54,142 @@ export default {
       currentComment: null,
       currentIndex: -1,
       postDetail: {},
-      message: '',
+      message: "",
       comments: [],
-      comment:[],
-      comment_display: null
+      comment: [],
+      comment_display: null,
     };
   },
 
-  props: {   
+  props: {
     post: {
       type: Object,
       content: "",
       userId: null,
       userName: "",
-    }
+    },
   },
 
-  components : {
+  components: {
     Header,
-    Comment
+    Comment,
   },
 
   mounted() {
-    let routeId = this.$route.params.id
-    this.comment_ = [...this.comment]
-    this.refreshList()
-    this.getPost(routeId);  
+    let routeId = this.$route.params.id;
+    this.comment_ = [...this.comment];
+    this.refreshList();
+    this.getPost(routeId);
     this.getCurrentUser();
+  },
+  created() {
+    this.access();
   },
 
   methods: {
-  ////////////////////////////////// POST //////////////////////////  
-    getCurrentUser(){
-      let userLog = JSON.parse(localStorage.getItem("userLog"))
-      this.currentUser = userLog
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
+    ////////////////////////////////// POST //////////////////////////
+    getCurrentUser() {
+      let userLog = JSON.parse(localStorage.getItem("userLog"));
+      this.currentUser = userLog;
     },
 
-    dateReform(date){
-      let dateUpdate = ""
-      let newDate = date.split("T")
-      let dateOnly = newDate[0]
-      let dateSplit = dateOnly.split("-")
+    dateReform(date) {
+      let dateUpdate = "";
+      let newDate = date.split("T");
+      let dateOnly = newDate[0];
+      let dateSplit = dateOnly.split("-");
       let reverseDate = dateSplit.reverse();
-      let joinDate = reverseDate.join("-")
-      dateUpdate += joinDate
-      
-      let timeOnly = newDate[1]
-      let timeSplit = timeOnly.split(".")
-      let timeSplitAgain = timeSplit[0].split(":")
-      dateUpdate += " à "
-      dateUpdate += timeSplitAgain[0]
-      dateUpdate += ":"
-      dateUpdate += timeSplitAgain[1]
-      
-      return dateUpdate
+      let joinDate = reverseDate.join("-");
+      dateUpdate += joinDate;
+
+      let timeOnly = newDate[1];
+      let timeSplit = timeOnly.split(".");
+      let timeSplitAgain = timeSplit[0].split(":");
+      dateUpdate += " à ";
+      dateUpdate += timeSplitAgain[0];
+      dateUpdate += ":";
+      dateUpdate += timeSplitAgain[1];
+
+      return dateUpdate;
     },
-    
+
     getPost(id) {
       PostDataService.get(id)
-        .then(response => {
+        .then((response) => {
           this.postDetail = response.data;
-          this.postDetail.createdAt = this.dateReform(response.data.createdAt)          
+          this.postDetail.createdAt = this.dateReform(response.data.createdAt);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
 
-    deletePost(){
+    deletePost() {
       PostDataService.delete(this.postDetail.id)
-      .then(response =>{
-        console.log(response.data);
-        window.alert("Votre publication a été supprimé !")
-        this.$router.push("/forum")
-      })
-      .catch(e =>{
-        console.log(e);
-      });
+        .then((response) => {
+          console.log(response.data);
+          window.alert("Votre publication a été supprimé !");
+          this.$router.push("/forum");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
 
-    modifyPost(){
+    modifyPost() {
       var msgModify = prompt("Modifier le post :");
       this.postDetail.content = msgModify;
       PostDataService.update(this.postDetail.id, this.postDetail)
-      .then(response =>{
-          window.alert("Votre publication a été modifié!")
+        .then((response) => {
+          window.alert("Votre publication a été modifié!");
           // document.location.reload(true);
-          console.log(msgModify)
-          console.log(response)
+          console.log(msgModify);
+          console.log(response);
         })
-        .catch(e =>{
+        .catch((e) => {
           console.log(e);
-        })
+        });
     },
 
     ////////////////////////// COMMENT //////////////////////////////
-    
+
     saveComment() {
-      let userId = JSON.parse(localStorage.getItem("userLog"))
+      let userId = JSON.parse(localStorage.getItem("userLog"));
       var data = {
         content: this.comment.content,
         userId: userId.id,
         userName: userId.name,
-        postId: this.postDetail.id
+        postId: this.postDetail.id,
       };
-      console.log(data)
+      console.log(data);
       CommentDataService.create(data)
-        .then(response => {
-          console.log(response)
+        .then((response) => {
+          console.log(response);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-        setTimeout(this.refreshList, 300)
+      setTimeout(this.refreshList, 300);
     },
-    
+
     refreshList() {
       this.retrieveComments(this.$route.params.id);
       this.currentComment = null;
-      this.currentIndex = -1
-      this.comment_display = 1
+      this.currentIndex = -1;
+      this.comment_display = 1;
     },
 
-     retrieveComments(postId) {
+    retrieveComments(postId) {
       CommentDataService.getAll(postId)
-        .then(response => {
+        .then((response) => {
           this.comments = response.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
@@ -176,13 +199,13 @@ export default {
       this.currentIndex = index;
     },
   },
-}
+};
 </script>
 
 <style >
 @keyframes commentMove {
   from {
-    opacity : 0;
+    opacity: 0;
     transform: translateX(50px);
   }
   to {
@@ -198,14 +221,13 @@ export default {
   background-color: rgb(255, 196, 0);
 }
 
-.posted_bloc{
+.posted_bloc {
   background-color: white;
   padding: 10px;
   margin: 5px;
   border-radius: 5px;
   text-overflow: clip;
   overflow-wrap: break-word;
-
 }
 
 .posted {
@@ -213,19 +235,19 @@ export default {
   width: 500px;
 }
 
-.postDetail{
+.postDetail {
   display: flex;
   flex-direction: column;
   max-width: 500px;
   margin: 200px auto 0 auto;
 }
 
-.posted_button{
+.posted_button {
   display: flex;
   margin: auto;
 }
 
-.backToForum{
+.backToForum {
   background-color: #091f43;
   color: white;
   font-family: Retroica;
@@ -234,21 +256,21 @@ export default {
   margin: auto auto auto 0px;
 }
 
-.post-userName{
+.post-userName {
   font-family: Retroica;
 }
 
-.addCommentSection{
+.addCommentSection {
   margin: auto;
   display: flex;
 }
 
-.addComment{
+.addComment {
   margin: auto;
   background-color: white;
-  color:#091f43;
+  color: #091f43;
 }
-.commentInput{
+.commentInput {
   width: 100%;
   margin-left: 5px;
 }
@@ -264,13 +286,13 @@ export default {
   animation-fill-mode: forwards;
 }
 
-@media all and (max-width: 499px){
-  .addCommentSection{
+@media all and (max-width: 499px) {
+  .addCommentSection {
     display: flex;
     flex-direction: column;
   }
 
-  .commentInput{
+  .commentInput {
     max-width: 93%;
     margin-left: 0;
   }

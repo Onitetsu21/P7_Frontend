@@ -1,9 +1,9 @@
 <template>
-  <div class="posted" > 
+  <div class="posted">
     <div class="topPosted">
       <div class="postUsername">{{post.userName}}</div>
-    </div> 
-    <div class="posted_bloc" >{{ post.content }}</div>
+    </div>
+    <div class="posted_bloc">{{ post.content }}</div>
     <div class="createdAt">{{post.createdAt}}</div>
     <button class="detailPost" @click="detailPost">DETAILS ET COMMENTAIRES</button>
   </div>
@@ -17,7 +17,7 @@ export default {
     return {
       currentPost: null,
       currentIndex: -1,
-      message: '',
+      message: "",
     };
   },
 
@@ -27,30 +27,39 @@ export default {
       content: "",
       userId: null,
       userName: "",
-    }
+    },
+  },
+
+  created() {
+    this.access();
   },
 
   methods: {
-    
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
+
     getPost(id) {
       PostDataService.get(id)
-        .then(response => {
+        .then((response) => {
           this.currentPost = response.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
 
-    detailPost(){
-      let postId = this.post.id
-      console.log("postId ====>", postId)
-      this.$router.push({ path: `/posts/${postId}` })
+    detailPost() {
+      let postId = this.post.id;
+      console.log("postId ====>", postId);
+      this.$router.push({ path: `/posts/${postId}` });
     },
   },
 
   mounted() {
-    this.getPost(this.post.id); 
+    this.getPost(this.post.id);
   },
 };
 </script>
@@ -64,7 +73,7 @@ export default {
   background-color: rgb(255, 196, 0);
 }
 
-.posted_bloc{
+.posted_bloc {
   background-color: white;
   color: black;
   padding: 10px;
@@ -74,24 +83,24 @@ export default {
   text-overflow: "…";
 }
 
-.detailPost{
+.detailPost {
   background-color: white;
   color: #091f43;
   border-radius: 5px;
   margin: 10px auto auto auto;
 }
 
-.topPosted{
+.topPosted {
   display: flex;
   flex-direction: row;
   font-size: 1.2rem;
   border-radius: 50px;
   font-family: Retroica;
-  color:white;
+  color: white;
   margin: auto auto 5px 1px;
 }
 
-.createdAt{
+.createdAt {
   text-align: right;
 }
 </style>

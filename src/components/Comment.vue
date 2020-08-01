@@ -1,13 +1,21 @@
 <template>
-  <div class="comment"> 
+  <div class="comment">
     <div class="comment-top">{{comment.userName}}</div>
     <div class="comment-content">
-      <div class="comment_bloc" >{{ comment.content }}</div>
+      <div class="comment_bloc">{{ comment.content }}</div>
     </div>
     <div class="createdAt">{{ comment.createdAt }}</div>
     <div class="comment_button">
-      <button class="deleteComment" v-if="currentUser.admin == 1 || currentUser.name == comment.userName" @click="deleteComment">Supprimer</button>
-      <button class="modifyComment" v-if="currentUser.admin == 1 || currentUser.name == comment.userName" @click="modifyComment">Modifier</button>
+      <button
+        class="deleteComment"
+        v-if="currentUser.admin == 1 || currentUser.name == comment.userName"
+        @click="deleteComment"
+      >Supprimer</button>
+      <button
+        class="modifyComment"
+        v-if="currentUser.admin == 1 || currentUser.name == comment.userName"
+        @click="modifyComment"
+      >Modifier</button>
     </div>
   </div>
 </template>
@@ -20,68 +28,76 @@ export default {
     return {
       currentUser: {},
       currentComment: null,
-      message: '',
+      message: "",
     };
   },
 
   props: {
     comment: {
-        type: Object,
-        content: "",
-        userId: null,
-        userName: "",
-    }
+      type: Object,
+      content: "",
+      userId: null,
+      userName: "",
+    },
   },
 
   mounted() {
     this.getComment(this.comment.id);
-    this.getCurrentUser();    
+    this.getCurrentUser();
   },
-  
+
+  created() {
+    this.access();
+  },
+
   methods: {
- 
-    getCurrentUser(){
-      let userLog = JSON.parse(localStorage.getItem("userLog"))
-      this.currentUser = userLog
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
+
+    getCurrentUser() {
+      let userLog = JSON.parse(localStorage.getItem("userLog"));
+      this.currentUser = userLog;
     },
 
     getComment(id) {
       CommentDataService.get(id)
-        .then(response => {
+        .then((response) => {
           this.currentComment = response.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
 
-    deleteComment(){
+    deleteComment() {
       CommentDataService.delete(this.comment.id)
-      .then(response =>{
-        console.log(response.data);
-        window.alert("Votre commentaire a été supprimé !")
-        this.$router.push("/forum")
-      })
-      .catch(e =>{
-        console.log(e);
-      });
+        .then((response) => {
+          console.log(response.data);
+          window.alert("Votre commentaire a été supprimé !");
+          this.$router.push("/forum");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
 
-    modifyComment(){
-    var msgModify = prompt("Modifier le Comment :");
-    this.comment.content = msgModify;
-    CommentDataService.update(this.comment.id, this.comment)
-    .then(response =>{
-        window.alert("Votre commentaire a été modifié !")
-        console.log(response)
-      })
-      .catch(e =>{
-        console.log(e);
-      })
+    modifyComment() {
+      var msgModify = prompt("Modifier le Comment :");
+      this.comment.content = msgModify;
+      CommentDataService.update(this.comment.id, this.comment)
+        .then((response) => {
+          window.alert("Votre commentaire a été modifié !");
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };
-
 </script>
 
 <style  >
@@ -124,13 +140,12 @@ export default {
   text-overflow: "…";
 }
 
-.createdAt{
+.createdAt {
   margin: 1px;
-
 }
 
 .comment_button {
-   display: flex;
+  display: flex;
   margin: auto;
 }
 </style>

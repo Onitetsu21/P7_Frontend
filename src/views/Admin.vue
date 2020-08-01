@@ -5,43 +5,58 @@
     <Header />
     <div id="forumApp">
       <div id="forum">
-        <Postedreview :class="{ active: index == currentIndex }" v-for="(post, index) in posts" v-bind:post="post" v-bind:key="index" @hover="setActivePost(post, index)"  />
+        <Postedreview
+          :class="{ active: index == currentIndex }"
+          v-for="(post, index) in posts"
+          v-bind:post="post"
+          v-bind:key="index"
+          @hover="setActivePost(post, index)"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Postedreview from "@/components/Postedreview.vue"
+import Postedreview from "@/components/Postedreview.vue";
 import Header from "@/components/Header.vue";
 import PostDataService from "../services/PostDataService";
 export default {
   name: "Forumreview",
-  data: function() {
+  data: function () {
     return {
-      posts:[],
+      posts: [],
       currentPost: null,
       currentIndex: -1,
       post: [],
       message: "",
       userId: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   },
   mounted() {
-        this.refreshList(); 
+    this.refreshList();
+  },
+
+  created() {
+    this.access();
   },
 
   methods: {
+    access() {
+      if (!JSON.parse(localStorage.getItem("userLog"))) {
+        this.$router.push("/");
+      }
+    },
     retrievePosts() {
       PostDataService.getAll()
-        .then(response => {
+        .then((response) => {
           this.posts = response.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
-      });
+        });
     },
 
     refreshList() {
@@ -59,19 +74,19 @@ export default {
 
   components: {
     Header,
-    Postedreview
-  }
+    Postedreview,
+  },
 };
 </script>
 
 <style>
 @keyframes postDetailMove {
   from {
-    opacity : 0;
+    opacity: 0;
     transform: translateX(-50px);
   }
   to {
-    opacity: 1; 
+    opacity: 1;
   }
 }
 
@@ -98,7 +113,7 @@ export default {
   font-family: Retroica;
 }
 
-#publishContent { 
+#publishContent {
   width: 100%;
 }
 
@@ -129,34 +144,34 @@ export default {
   font-size: 1rem;
 }
 
-h3{
+h3 {
   font-family: Retroica;
   color: #091f43;
 }
 
-@media all and (max-width: 499px){
-  #publishSection{
+@media all and (max-width: 499px) {
+  #publishSection {
     display: flex;
     flex-direction: column;
     max-width: 100%;
   }
 
   .PostDetail {
-  margin: 10px auto auto auto;  
-  animation: postDetailMove;
-  animation-duration: 0.5s;
-  transition-timing-function: ease-in-out;
-  display: flex;
-  flex-direction: column;
-  min-width: 100px;
-  background-color: #091f43;
-  min-height: 90px;
-  border: 1px solid #091f43;
-  color: white;
-  border-radius: 5px;
-  max-width: 300px;
-  padding: 10px;
-  text-align: left;
+    margin: 10px auto auto auto;
+    animation: postDetailMove;
+    animation-duration: 0.5s;
+    transition-timing-function: ease-in-out;
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    background-color: #091f43;
+    min-height: 90px;
+    border: 1px solid #091f43;
+    color: white;
+    border-radius: 5px;
+    max-width: 300px;
+    padding: 10px;
+    text-align: left;
   }
 
   .refreshButton {
@@ -168,7 +183,7 @@ h3{
     font-family: Retroica;
   }
 
-  #publishContent{
+  #publishContent {
     max-width: 80%;
     left: 0px;
     padding: 10px 0 10px 0;
@@ -183,7 +198,7 @@ h3{
   }
 }
 
-@media all and (min-width: 500px){
+@media all and (min-width: 500px) {
   .PostDetail {
     animation: postDetailMove;
     animation-duration: 1s;
@@ -199,8 +214,6 @@ h3{
     max-width: 480px;
     padding: 10px;
     text-align: left;
-   
-
   }
 
   .createdAt {
