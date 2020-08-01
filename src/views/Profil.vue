@@ -43,16 +43,8 @@ export default {
   components: {
     Header,
   },
-  created() {
-    this.access();
-  },
 
   methods: {
-    access() {
-      if (!JSON.parse(localStorage.getItem("userLog"))) {
-        this.$router.push("/");
-      }
-    },
     deleteProfil() {
       let userId = JSON.parse(localStorage.getItem("userLog"));
 

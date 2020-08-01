@@ -30,17 +30,7 @@ export default {
     },
   },
 
-  created() {
-    this.access();
-  },
-
   methods: {
-    access() {
-      if (!JSON.parse(localStorage.getItem("userLog"))) {
-        this.$router.push("/");
-      }
-    },
-
     getPost(id) {
       PostDataService.get(id)
         .then((response) => {

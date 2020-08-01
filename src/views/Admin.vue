@@ -39,16 +39,7 @@ export default {
     this.refreshList();
   },
 
-  created() {
-    this.access();
-  },
-
   methods: {
-    access() {
-      if (!JSON.parse(localStorage.getItem("userLog"))) {
-        this.$router.push("/");
-      }
-    },
     retrievePosts() {
       PostDataService.getAll()
         .then((response) => {

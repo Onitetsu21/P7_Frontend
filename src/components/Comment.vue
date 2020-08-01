@@ -46,17 +46,7 @@ export default {
     this.getCurrentUser();
   },
 
-  created() {
-    this.access();
-  },
-
   methods: {
-    access() {
-      if (!JSON.parse(localStorage.getItem("userLog"))) {
-        this.$router.push("/");
-      }
-    },
-
     getCurrentUser() {
       let userLog = JSON.parse(localStorage.getItem("userLog"));
       this.currentUser = userLog;

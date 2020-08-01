@@ -49,17 +49,7 @@ export default {
     },
   },
 
-  created() {
-    this.access();
-  },
-
   methods: {
-    access() {
-      if (!JSON.parse(localStorage.getItem("userLog"))) {
-        this.$router.push("/");
-      }
-    },
-
     deletePost() {
       PostDataService.delete(this.post.id)
         .then((response) => {
