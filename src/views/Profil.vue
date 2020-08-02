@@ -64,7 +64,7 @@ export default {
     },
 
     modifyProfil() {
-      if(this.validateEmail(this.user.email) == true) {
+      if(!this.user.email || this.validateEmail(this.user.email) == true) {
         let userId = JSON.parse(localStorage.getItem("userLog"));
         if (!this.user.name) {
           this.user.name = userId.name;
