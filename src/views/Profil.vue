@@ -59,29 +59,37 @@ export default {
           console.log(e);
         });
     },
+    validateEmail(email) {
+      return /\b[\w]+@[\w]+\.\w{2,4}\b/gi.test(String(email).toLowerCase());
+    },
 
     modifyProfil() {
-      let userId = JSON.parse(localStorage.getItem("userLog"));
-      if (!this.user.name) {
-        this.user.name = userId.name;
+      if(this.validateEmail(this.user.email) == true) {
+        let userId = JSON.parse(localStorage.getItem("userLog"));
+        if (!this.user.name) {
+          this.user.name = userId.name;
+        }
+        if (!this.user.email) {
+          this.user.email = userId.email;
+        }
+        if (!this.user.password) {
+          this.user.password = userId.password;
+        }
+        console.log(userId.id);
+        UserDataService.update(userId.id, this.user)
+          .then((response) => {
+            this.user = {};
+            console.log(response);
+            window.alert("Votre profil à été mis à jour!");
+            this.$router.push("/forum");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }else{
+        window.alert("Veuillez rentrer une adresse mail valide")
       }
-      if (!this.user.email) {
-        this.user.email = userId.email;
-      }
-      if (!this.user.password) {
-        this.user.password = userId.password;
-      }
-      console.log(userId.id);
-      UserDataService.update(userId.id, this.user)
-        .then((response) => {
-          this.user = {};
-          console.log(response);
-          window.alert("Votre profil à été mis à jour!");
-          this.$router.push("/forum");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      
     },
   },
 };
