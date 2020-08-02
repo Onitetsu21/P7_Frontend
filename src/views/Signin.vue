@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 <template>
   <div id="body">
     <Header />
@@ -62,9 +64,12 @@ export default {
     validateEmail(email) {
       return /\b[\w]+@[\w]+\.\w{2,4}\b/gi.test(String(email).toLowerCase());
     },
+    validatePassword(password){
+      return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/gi.test(String(password))
+    },
 
     signin() {
-      if (this.validateEmail(this.newUser.email) == true) {
+      if (this.validateEmail(this.newUser.email) == true && this.validatePassword(this.newUser.password) == true) {
         var data = {
           name: this.newUser.name,
           email: this.newUser.email,
@@ -87,7 +92,7 @@ export default {
             );
           });
       } else {
-        window.alert("Veuillez rentrer une adresse mail valide!");
+        window.alert("Veuillez rentrer une adresse mail valide, et un mot de passe contenant au moins: 8 charactères, une lettre, un chiffre et un charactère spécial");
       }
     },
   },

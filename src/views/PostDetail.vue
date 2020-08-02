@@ -10,12 +10,12 @@
         <div class="posted_button">
           <button
             class="deletePost"
-            v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName"
+            v-if="currentUser.admin == 1 || currentUser.id == postDetail.userId"
             @click="deletePost"
           >Supprimer</button>
           <button
             class="modifyPost"
-            v-if="currentUser.admin == 1 || currentUser.name == postDetail.userName"
+            v-if="currentUser.admin == 1 || currentUser.id == postDetail.userId"
             @click="modifyPost"
           >Modifier</button>
         </div>
@@ -88,33 +88,36 @@ export default {
     getCurrentUser() {
       let userLog = JSON.parse(localStorage.getItem("userLog"));
       this.currentUser = userLog;
+      console.log("this.currentUser", this.currentUser)
+      console.log("this.postdetail id", this.postDetail.userId)
     },
 
-    dateReform(date) {
-      let dateUpdate = "";
-      let newDate = date.split("T");
-      let dateOnly = newDate[0];
-      let dateSplit = dateOnly.split("-");
-      let reverseDate = dateSplit.reverse();
-      let joinDate = reverseDate.join("-");
-      dateUpdate += joinDate;
+    // dateReform(date) {
+    //   let dateUpdate = "";
+    //   let newDate = date.split("T");
+    //   let dateOnly = newDate[0];
+    //   let dateSplit = dateOnly.split("-");
+    //   let reverseDate = dateSplit.reverse();
+    //   let joinDate = reverseDate.join("-");
+    //   dateUpdate += joinDate;
 
-      let timeOnly = newDate[1];
-      let timeSplit = timeOnly.split(".");
-      let timeSplitAgain = timeSplit[0].split(":");
-      dateUpdate += " à ";
-      dateUpdate += timeSplitAgain[0];
-      dateUpdate += ":";
-      dateUpdate += timeSplitAgain[1];
+    //   let timeOnly = newDate[1];
+    //   let timeSplit = timeOnly.split(".");
+    //   let timeSplitAgain = timeSplit[0].split(":");
+    //   dateUpdate += " à ";
+    //   dateUpdate += timeSplitAgain[0];
+    //   dateUpdate += ":";
+    //   dateUpdate += timeSplitAgain[1];
 
-      return dateUpdate;
-    },
+    //   return dateUpdate;
+    // },
 
     getPost(id) {
       PostDataService.get(id)
         .then((response) => {
-          this.postDetail = response.data;
-          this.postDetail.createdAt = this.dateReform(response.data.createdAt);
+          this.postDetail = response.data[0];
+          
+          // this.postDetail.createdAt = this.dateReform(response.data.createdAt);
         })
         .catch((e) => {
           console.log(e);
@@ -158,6 +161,7 @@ export default {
         userName: userId.name,
         postId: this.postDetail.id,
       };
+      console.log("postid ==>", this.postDetail.id)
       console.log(data);
       CommentDataService.create(data)
         .then((response) => {
@@ -180,6 +184,7 @@ export default {
       CommentDataService.getAll(postId)
         .then((response) => {
           this.comments = response.data;
+          console.log("res data ===>",response.data);
         })
         .catch((e) => {
           console.log(e);

@@ -91,6 +91,7 @@ export default {
           );
 
           localStorage.setItem("userLog", JSON.stringify(this.logedUser));
+          console.log(this.logedUser)
           console.log("Authentification réussie");
           this.$router.push("/forum");
         })

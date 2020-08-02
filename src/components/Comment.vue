@@ -8,12 +8,12 @@
     <div class="comment_button">
       <button
         class="deleteComment"
-        v-if="currentUser.admin == 1 || currentUser.name == comment.userName"
+        v-if="currentUser.admin == 1 || currentUser.id == comment.userId"
         @click="deleteComment"
       >Supprimer</button>
       <button
         class="modifyComment"
-        v-if="currentUser.admin == 1 || currentUser.name == comment.userName"
+        v-if="currentUser.admin == 1 || currentUser.id == comment.userId"
         @click="modifyComment"
       >Modifier</button>
     </div>
@@ -55,6 +55,7 @@ export default {
     getComment(id) {
       CommentDataService.get(id)
         .then((response) => {
+          console.log("res data ===>",response.data);
           this.currentComment = response.data;
         })
         .catch((e) => {
@@ -65,7 +66,7 @@ export default {
     deleteComment() {
       CommentDataService.delete(this.comment.id)
         .then((response) => {
-          console.log(response.data);
+          console.log(response);
           window.alert("Votre commentaire a été supprimé !");
           this.$router.push("/forum");
         })

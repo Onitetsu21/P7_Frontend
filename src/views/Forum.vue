@@ -84,7 +84,7 @@ export default {
     setActivePost(post, index) {
       this.currentPost = post;
       this.currentIndex = index;
-      localStorage.setItem("currentPost", JSON.stringyfy(this.currentPost));
+      // localStorage.setItem("currentPost", JSON.stringify(this.currentPost));
     },
   },
 

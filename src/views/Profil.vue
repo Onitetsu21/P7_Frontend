@@ -33,6 +33,7 @@ export default {
   data: function () {
     return {
       user: {
+        id:"",
         name: "",
         email: "",
         password: "",
@@ -62,30 +63,45 @@ export default {
     validateEmail(email) {
       return /\b[\w]+@[\w]+\.\w{2,4}\b/gi.test(String(email).toLowerCase());
     },
+    validatePassword(psd){
+      return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/gi.test(String(psd))
+    },
 
     modifyProfil() {
-      if(!this.user.email || this.validateEmail(this.user.email) == true) {
-        let userId = JSON.parse(localStorage.getItem("userLog"));
-        if (!this.user.name) {
-          this.user.name = userId.name;
+    
+      if(!this.user.email || this.validateEmail(this.user.email) == true ) {
+        if(!this.user.password || this.validatePassword(this.user.password) == true){
+          
+          let userId = JSON.parse(localStorage.getItem("userLog"));
+            if (!this.user.name) {
+              this.user.name = userId.name;
+            }
+            if (!this.user.email) {
+              this.user.email = userId.email;
+            }
+            if (!this.user.password) {
+              this.user.password = userId.password;
+            }
+            this.user.id = userId.id
+            UserDataService.update(userId.id, this.user)
+              .then((response) => {
+                
+                console.log("res update ==>", response);
+                localStorage.setItem("userLog", JSON.stringify(this.user))
+                console.log("userLog ===>", JSON.parse(localStorage.getItem("userLog")));
+                window.alert("Votre profil à été mis à jour!");
+                this.user = {};
+                this.$router.push("/forum");
+                
+                
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }else{
+          window.alert("Veuillez rentrer un mot de passe contenant au moins: 8 charactères, une lettre, un chiffre et un charactère spécial")
         }
-        if (!this.user.email) {
-          this.user.email = userId.email;
-        }
-        if (!this.user.password) {
-          this.user.password = userId.password;
-        }
-        console.log(userId.id);
-        UserDataService.update(userId.id, this.user)
-          .then((response) => {
-            this.user = {};
-            console.log(response);
-            window.alert("Votre profil à été mis à jour!");
-            this.$router.push("/forum");
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        
       }else{
         window.alert("Veuillez rentrer une adresse mail valide")
       }
