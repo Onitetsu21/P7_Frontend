@@ -1,10 +1,10 @@
 <template>
   <div class="posted">
     <div class="topPosted">
-      <div class="postUsername">{{post.userName}}</div>
+      <div class="postUsername">{{currentPost.userName}}</div>
     </div>
-    <div class="posted_bloc">{{ post.content }}</div>
-    <div class="createdAt">{{post.createdAt}}</div>
+    <div class="posted_bloc">{{ currentPost.content }}</div>
+    <div class="createdAt">{{currentPost.createdAt}}</div>
     <button class="detailPost" @click="detailPost">DETAILS ET COMMENTAIRES</button>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
   name: "Posted",
   data() {
     return {
-      currentPost: null,
+      currentPost: {},
       currentIndex: -1,
       message: "",
     };
@@ -34,7 +34,11 @@ export default {
     getPost(id) {
       PostDataService.get(id)
         .then((response) => {
-          this.currentPost = response.data;
+          console.log("response.data",response.data[0].updatedAt)
+          this.currentPost = response.data[0];
+          if(response.data[0].updatedAt != response.data[0].createdAt){
+            this.currentPost.createdAt = response.data[0].updatedAt
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -43,7 +47,6 @@ export default {
 
     detailPost() {
       let postId = this.post.id;
-      console.log("postId ====>", postId);
       this.$router.push({ path: `/posts/${postId}` });
     },
   },

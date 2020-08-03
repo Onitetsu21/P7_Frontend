@@ -55,8 +55,12 @@ export default {
     getComment(id) {
       CommentDataService.get(id)
         .then((response) => {
-          console.log("res data ===>",response.data);
           this.currentComment = response.data;
+          
+          console.log("this.currentComment.updatedAt", response)
+          if(this.comment.updatedAt != this.comment.createdAt){
+            this.comment.createdAt = this.comment.updatedAt
+          }
         })
         .catch((e) => {
           console.log(e);

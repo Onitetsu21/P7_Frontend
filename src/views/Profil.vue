@@ -3,7 +3,13 @@
 <template>
   <div id="body">
     <Header />
+    
     <div id="profil">
+      <div id="popup" v-if="displayPopup">
+        <label for="confirmPassInput" >Confirmé le password</label>
+        <input class="confirmPassInput" title="password" type="password" v-model="oldPassword"/>
+        <button class="confirmPassButton" @click="confirmPassword">Valider</button>
+      </div>
       <h1>Gestion de profil</h1>
       <div id="name">
         <label for="name">Changer de nom d'utilisateur :</label>
@@ -18,8 +24,8 @@
         <input title="password" type="password" v-model="user.password" placeholder="Mot de passe" />
       </div>
       <div id="profilButtons">
-        <button id="updateprofil" v-on:click="modifyProfil">Sauvegarder les modifications</button>
-        <button id="deleteprofil" v-on:click="deleteProfil">Supprimer le compte</button>
+        <button id="updateprofil" v-on:click="openPopup">Sauvegarder les modifications</button>
+        <button id="deleteprofil" v-on:click="openPopup">Supprimer le compte</button>
       </div>
     </div>
   </div>
@@ -38,6 +44,9 @@ export default {
         email: "",
         password: "",
       },
+      oldPassword: "",
+      displayPopup: false,
+      action: null,
     };
   },
 
@@ -67,12 +76,40 @@ export default {
       return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/gi.test(String(psd))
     },
 
+    openPopup(evt){
+      this.displayPopup = true;
+      this.action = evt.originalTarget.id
+    },
+
+    confirmPassword(){
+      let userId = JSON.parse(localStorage.getItem("userLog")).id;
+     
+      let data = {password : this.oldPassword, userId}
+  
+      UserDataService.confirmPassword(data)
+      .then( result => {
+        if (this.action == "updateprofil"){
+          this.modifyProfil() 
+        }else if(this.action == "deleteprofil"){
+          this.deleteProfil()
+        }
+        console.log(result)
+        this.displayPopup = false;
+      })
+      .catch( err => {
+        console.log(err)
+        console.log(JSON.parse(localStorage.getItem("userLog")))
+        this.displayPopup = false;
+      })
+    },
+
     modifyProfil() {
-    
+      
       if(!this.user.email || this.validateEmail(this.user.email) == true ) {
         if(!this.user.password || this.validatePassword(this.user.password) == true){
           
           let userId = JSON.parse(localStorage.getItem("userLog"));
+          let changePassword = false;
             if (!this.user.name) {
               this.user.name = userId.name;
             }
@@ -81,22 +118,28 @@ export default {
             }
             if (!this.user.password) {
               this.user.password = userId.password;
+              changePassword = false;
+            }else if(this.user.password){
+              changePassword = true
             }
+            this.user.changePassword = changePassword
             this.user.id = userId.id
+            this.user.token = userId.token
+            this.user.admin = userId.admin
             UserDataService.update(userId.id, this.user)
               .then((response) => {
-                
-                console.log("res update ==>", response);
+                console.log(response)
+
+
                 localStorage.setItem("userLog", JSON.stringify(this.user))
-                console.log("userLog ===>", JSON.parse(localStorage.getItem("userLog")));
                 window.alert("Votre profil à été mis à jour!");
                 this.user = {};
                 this.$router.push("/forum");
-                
-                
+
               })
               .catch((e) => {
                 console.log(e);
+                
               });
         }else{
           window.alert("Veuillez rentrer un mot de passe contenant au moins: 8 charactères, une lettre, un chiffre et un charactère spécial")
@@ -166,6 +209,29 @@ h1 {
   font-size: 2rem;
 }
 
+#popup {
+  position: fixed;
+  background: white;
+  color: black;
+  z-index: 10;
+  width: 350px;
+  height: 120px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+  margin: 250px auto auto 90px;
+  border: 1px solid black;
+  
+  }
+.confirmPassButton {
+  color: white;
+  background-color: #091f43;
+}
+
+.confirmPassInput{
+max-width: 90%;
+}
 @media all and (max-width: 499px) {
   #email,
   #psw,
@@ -173,5 +239,11 @@ h1 {
     margin: 10px 0 0 0;
     max-width: 93%;
   }
+
+  #popup{
+    margin: 250px auto auto 22.5px;
+    width: 300px;
+  }
 }
+
 </style>

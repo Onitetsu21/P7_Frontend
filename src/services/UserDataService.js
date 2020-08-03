@@ -30,6 +30,9 @@ class UserDataService {
   login(data) {
     return http.post(`/users/login`, data);
   }
+  confirmPassword(data) {
+    return http.post(`/users/confirmpass`, data);
+  }
 
 }
 

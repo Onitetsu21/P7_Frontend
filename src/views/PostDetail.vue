@@ -87,36 +87,16 @@ export default {
     ////////////////////////////////// POST //////////////////////////
     getCurrentUser() {
       let userLog = JSON.parse(localStorage.getItem("userLog"));
-      this.currentUser = userLog;
-      console.log("this.currentUser", this.currentUser)
-      console.log("this.postdetail id", this.postDetail.userId)
+      this.currentUser = userLog;   
     },
-
-    // dateReform(date) {
-    //   let dateUpdate = "";
-    //   let newDate = date.split("T");
-    //   let dateOnly = newDate[0];
-    //   let dateSplit = dateOnly.split("-");
-    //   let reverseDate = dateSplit.reverse();
-    //   let joinDate = reverseDate.join("-");
-    //   dateUpdate += joinDate;
-
-    //   let timeOnly = newDate[1];
-    //   let timeSplit = timeOnly.split(".");
-    //   let timeSplitAgain = timeSplit[0].split(":");
-    //   dateUpdate += " à ";
-    //   dateUpdate += timeSplitAgain[0];
-    //   dateUpdate += ":";
-    //   dateUpdate += timeSplitAgain[1];
-
-    //   return dateUpdate;
-    // },
 
     getPost(id) {
       PostDataService.get(id)
         .then((response) => {
           this.postDetail = response.data[0];
-          
+          if(response.data[0].updatedAt != response.data[0].createdAt){
+            this.postDetail.createdAt = response.data[0].updatedAt
+          }
           // this.postDetail.createdAt = this.dateReform(response.data.createdAt);
         })
         .catch((e) => {
@@ -141,8 +121,7 @@ export default {
       this.postDetail.content = msgModify;
       PostDataService.update(this.postDetail.id, this.postDetail)
         .then((response) => {
-          window.alert("Votre publication a été modifié!");
-          // document.location.reload(true);
+          window.alert("Votre publication a été modifié!");    
           console.log(msgModify);
           console.log(response);
         })
@@ -161,8 +140,6 @@ export default {
         userName: userId.name,
         postId: this.postDetail.id,
       };
-      console.log("postid ==>", this.postDetail.id)
-      console.log(data);
       CommentDataService.create(data)
         .then((response) => {
           console.log(response);
@@ -184,7 +161,6 @@ export default {
       CommentDataService.getAll(postId)
         .then((response) => {
           this.comments = response.data;
-          console.log("res data ===>",response.data);
         })
         .catch((e) => {
           console.log(e);

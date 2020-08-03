@@ -162,4 +162,16 @@ input {
   font-family: Retroica;
   font-size: 2rem;
 }
+
+@media all and (max-width: 499px) {
+  #auth {
+    margin: auto;
+  }
+  #email,
+#password,
+#name {
+  margin: 10px auto auto 1px;
+  width: 90vw;
+}
+}
 </style>

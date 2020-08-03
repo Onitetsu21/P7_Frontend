@@ -63,19 +63,16 @@ export default {
 
 
   methods: {
-    userLog() {
-      let userLogin = JSON.parse(localStorage.getItem("userLog"));
-      console.log(userLogin);
-    },
+
 
     loginUser() {
       var data = {
-        userId: this.userId,
         email: this.user.email,
         password: this.user.password
       };
       UserDataService.login(data)
         .then(response => {
+          console.log("data==>", response.data.user)
           this.conFailed = 0;
           const res = response;
           this.logedUser.id = res.data.user.id;
@@ -89,9 +86,9 @@ export default {
             "access_token",
             JSON.stringify(this.logedUser.token)
           );
-
+          console.log("this.log", this.logedUser)
           localStorage.setItem("userLog", JSON.stringify(this.logedUser));
-          console.log(this.logedUser)
+          
           console.log("Authentification réussie");
           this.$router.push("/forum");
         })

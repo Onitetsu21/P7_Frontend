@@ -48,9 +48,12 @@ export default {
   },
 
   mounted() {
-    let userLoged = JSON.parse(localStorage.getItem("userLog"));
+    let userLoged = ""
+    if(JSON.parse(localStorage.getItem("userLog"))){
+      userLoged = JSON.parse(localStorage.getItem("userLog"));
+    }
     this.navDynamic(userLoged);
-    this.adminMode(userLoged);
+      this.adminMode(userLoged);
   },
 
   methods: {
@@ -91,8 +94,8 @@ export default {
 .headerButton {
   background-color: #091f0000;
   color: white;
-  border: 1px solid #091f4342;
-  border-radius: 5px;
+  
+
   font-family: Retroica;
   margin-right: 5px;
   font-size: 1rem;

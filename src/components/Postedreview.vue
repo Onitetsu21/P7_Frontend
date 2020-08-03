@@ -1,10 +1,10 @@
 <template>
   <div class="posted">
     <div class="topPosted">
-      <div class="postUsername">{{post.userName}}</div>
+      <div class="postUsername">{{postDetail.userName}}</div>
     </div>
-    <div class="posted_bloc">{{ post.content }}</div>
-    <div class="createdAt">{{post.createdAt}}</div>
+    <div class="posted_bloc">{{ postDetail.content }}</div>
+    <div class="createdAt">{{postDetail.createdAt}}</div>
     <div id="postEdit">
       <button class="deletePost" @click="deletePost">Supprimer</button>
       <button class="modifyPost" @click="modifyPost">Modifier</button>
@@ -35,6 +35,7 @@ export default {
       message: "",
       comments: [],
       comment: [],
+      postDetail: {},
       comment_display: null,
       currentComment: null,
     };
@@ -54,7 +55,8 @@ export default {
       PostDataService.delete(this.post.id)
         .then((response) => {
           console.log(response);
-          document.location.reload(true);
+          window.alert("Votre publication a été supprimé !");
+          this.$router.push("/forum")
         })
         .catch((e) => {
           console.log(e);
@@ -67,6 +69,8 @@ export default {
       PostDataService.update(this.post.id, this.post)
         .then((response) => {
           console.log(response);
+          window.alert("Votre publication a été modifié!");
+          this.$router.push("/forum")
         })
         .catch((e) => {
           console.log(e);
@@ -76,8 +80,12 @@ export default {
     getPost(id) {
       PostDataService.get(id)
         .then((response) => {
-          this.currentPost = response.data;
-        })
+          this.postDetail = response.data[0];
+          if(response.data[0].updatedAt != response.data[0].createdAt){
+            this.postDetail.createdAt = response.data[0].updatedAt
+          }
+          // this.postDetail.createdAt = this.dateReform(response.data.createdAt);
+        }) 
         .catch((e) => {
           console.log(e);
         });
@@ -114,7 +122,7 @@ export default {
   mounted() {
     this.comment_ = [...this.comment];
     this.refreshList();
-    this.getPost();
+    this.getPost(this.post.id);
   },
 
   components: {
